@@ -36,7 +36,9 @@
                     <a class="nav-link" id="display-all-categories">Tout les Produits</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link">Panier</a>
+                    <a class="nav-link"><button type="button" class="btn btn-info mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      Panier
+                    </button></a>
                   </li>
                 </ul>
               </div>
@@ -51,7 +53,7 @@
                   <h5 class="card-title">plante d'intérieur Philodendron Monstera</h5>
                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                   <p>prix <span data-price="product-price">59,90</span>€</p>
-                  <a href="#" class="btn btn-primary">Ajouter au panier</a>                </div>
+                  <a href="#" class="btn btn-primary" data-product-id="1">Ajouter au panier</a>                </div>
                 </div>
               </div>
 
@@ -61,7 +63,7 @@
                     <h5 class="card-title">gros plant de Dracaena Marginata de Madagascar</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <p>prix <span data-price="product-price">69,90</span>€</p>
-                    <a href="#" class="btn btn-primary">Ajouter au panier</a>                </div>
+                    <a href="#" class="btn btn-primary" data-product-id="2">Ajouter au panier</a>                </div>
                 </div>
               </div>
         </section>
@@ -72,7 +74,7 @@
                   <h5 class="card-title">Pot de fleur anthracite</h5>
                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                   <p>prix <span data-price="product-price">15,90</span>€</p>
-                  <a href="#" class="btn btn-primary">Ajouter au panier</a>                </div>
+                  <a href="#" class="btn btn-primary" data-product-id="3">Ajouter au panier</a>                </div>
               </div>
 
               <div class="card" style="width: 18rem;">
@@ -81,7 +83,7 @@
                   <h5 class="card-title">GRAND POT DE FLEUR ZEN</h5>
                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                   <p>prix <span data-price="product-price">17,90</span>€</p>
-                  <a href="#" class="btn btn-primary">Ajouter au panier</a>                </div>
+                  <a href="#" class="btn btn-primary" data-product-id="4">Ajouter au panier</a>                </div>
               </div>
         </section>
         <section id="fertilizers" class="p-3 m-3 d-flex justify-content-around">
@@ -91,7 +93,7 @@
                   <h5 class="card-title">Bâtonnets engrais bio plantes vertes </h5>
                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                   <p>prix <span data-price="product-price">3,90</span>€</p>
-                  <a href="#" class="btn btn-primary">Ajouter au panier</a>
+                  <a href="#" class="btn btn-primary" data-product-id="5">Ajouter au panier</a>
                 </div>
               </div>
 
@@ -101,12 +103,30 @@
                   <h5 class="card-title">Argile blanche contre les doryphores</h5>
                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                   <p>prix <span data-price="product-price">14,90</span>€</p>
-                  <a href="#" class="btn btn-primary">Ajouter au panier</a>
+                  <a href="#" class="btn btn-primary" data-product-id="6">Ajouter au panier</a>
                 </div>
               </div>
         </section>
     </main>
 
+    
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mon Panier</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table></table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="clear-shopping-cart" class="btn btn-secondary" data-bs-dismiss="modal">Vider Panier</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
