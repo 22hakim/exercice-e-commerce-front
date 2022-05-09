@@ -1,0 +1,15 @@
+body{
+    background-color: bisque;
+}
+
+img{
+    max-height: 286px;
+}
+
+.diplayOn {
+    display: block !important;
+}
+
+.displayOff{
+    display: none !important;
+}
