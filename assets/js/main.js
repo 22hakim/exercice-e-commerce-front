@@ -1,15 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
-  
-  refreshCart();
-
-});
+document.addEventListener("DOMContentLoaded", refreshCart);
 
 document.addEventListener("click", (event) => {
   event.preventDefault();
 
   if (event.target.matches(".dropdown-item")) {
     const categoryName = event.target.dataset.categoryName;
-    // console.log(categoryName)
     displayOneCategory(categoryName);
   }
 
@@ -19,156 +14,56 @@ document.addEventListener("click", (event) => {
 
   if (event.target.matches("[data-product-id]")) {
     addProduct(event.target);
+    refreshCart();
   }
 
   if (event.target.matches("#clear-shopping-cart")){
     clearShoppingCart("panier")
+    refreshCart();
   }
 
-  if (event.target.matches("[data-id]")){
-    deleteProductFromCart(event.target.dataset.id)
+  if (event.target.matches("[data-id] button")){
+    const element = getGrandFatherElement(event.target)
+    deleteProductFromCart(element.dataset.id);
+    refreshCart();
+  }
+
+  if (event.target.matches("[data-change-quantity]")){
+    const element = getGrandFatherElement(event.target)
+    // console.log(element)
+    changeQuantity(element.dataset.id, event.target.dataset.changeQuantity)
+   // refreshCart()
   }
 });
 
-function displayOneCategory(categoryName) {
-  const sections = document.querySelectorAll("section");
 
-  for (const element of sections) {
-    if (element.id == categoryName) {
-      changeClasses(element, "displayOff", "displayOn");
-    } else {
-      changeClasses(element, "displayOn", "displayOff");
+function changeQuantity(idProduct, statut)
+{
+  // je recupere mon panier 
+  const shoppingCart = getLocalStorage("panier");
+  // je recupere l'index du produit avec son ID 
+  const foundIndex = shoppingCart.findIndex((item) => item.id == idProduct);
+  // je modifie sa quantité 
+  if(statut == "less"){
+    if(shoppingCart[foundIndex].quantity == 1){
+      const newShoppingCart = shoppingCart.filter(elem => elem.id != idProduct);
+      setLocalStorage("panier", newShoppingCart);
+      refreshCart();
+      return;      
+    }else{
+      shoppingCart[foundIndex].quantity--;
     }
+
+  }else{
+    shoppingCart[foundIndex].quantity++;
   }
-}
 
-function displayAllCategories() {
-  const sections = document.querySelectorAll("section");
-
-  // for(const element of sections)
-  // {
-  //     changeClasses(element, "displayOff", "displayOn")
-  // }
-
-  sections.forEach((elem) => changeClasses(elem, "displayOff", "displayOn"));
-}
-
-function changeClasses(element, oldClass, newClass) {
-  // verifie que l'element contiens la classe
-  // ex: <span class="toto"></span> contient la classe toto
-  // donc retourne true
-  if (element.classList.contains(oldClass)) {
-    // dans ces cas la il enleve toto
-    element.classList.remove(oldClass);
-  }
-  // et ajoute la nouvelle classe ex : tata
-  element.classList.add(newClass);
-
-  // resultat <span class="tata"></span>
-}
-
-function addProduct(element) {
-  // console.log(element.dataset.productId)
-  // const id = element.dataset.productId
-  // console.log(element.parentNode)
-  const parent = element.parentNode;
-  // console.log(parent)
-  // const price = parent.querySelector("[data-price]").textContent
-  //console.log(price)
-  // const title = parent.querySelector(".card-title").textContent
-  // console.log(title)
-
-  const price = parent.querySelector("[data-price]").textContent;
-  const priceEur = Number(price.replace(",", "."));
-
-  const product = {
-    id: Number(element.dataset.productId),
-    price: priceEur,
-    title: parent.querySelector(".card-title").textContent,
-    quantity: 1,
-  };
-
-  // apres avoir crée mon produit je l'ajoute au panier
-  addToCart(product);
-
-  // je met a jour mon panier
+  setLocalStorage("panier", shoppingCart);
   refreshCart();
 }
 
-function addToCart(product) {
-  // je recupere mon panier
-  const shoppingCart = getLocalStorage("panier");
 
-  const foundIndex = shoppingCart.findIndex((item) => item.id == product.id);
-
-  if (foundIndex != -1) {
-    // si l'index existe alors j'augmente la quantité
-    shoppingCart[foundIndex].quantity++;
-  } else {
-    // j'ajoute au panier
-    shoppingCart.push(product);
-  }
-
-  // j'écrase mon ancien panier par le nouveau
-  setLocalStorage("panier", shoppingCart);
-}
-
-function getLocalStorage(key) {
-  let localValue = localStorage.getItem(key);
-
-  if (JSON.parse(localValue) != null) {
-    return JSON.parse(localValue);
-  }
-  return [];
-}
-
-function setLocalStorage(key, value) {
-  const JsonArray = JSON.stringify(value);
-  localStorage.setItem(key, JsonArray);
-}
-
-function refreshCart()
+function getGrandFatherElement(element)
 {
-    const shoppingCart = getLocalStorage("panier");
-    const bodyOfModal = document.querySelector(".modal-body table"); 
-    let total = 0;
-    // je vide mon panier au cas ou pour etre sur d'avoir uniquement
-    // ce que je souhaite avoir
-
-    for(const product of shoppingCart)
-    {
-        //console.log(product)
-        //j'ajoute mes produits
-        bodyOfModal.innerHTML += `
-        <tr>
-            <td style="margin-right:10px">${product.quantity}</td>
-            <td>${product.title}</td>
-            <td>${(product.quantity * product.price).toFixed(2)} €</td>
-            <td><button type="button" 
-                        class="btn btn-danger"
-                        data-id=${product.id}>Supprimer</button>
-            </td>
-        </tr>`
-
-        total += product.quantity * product.price
-    }
-
-    bodyOfModal.innerHTML += `<tr colspan="4">montant total = ${total.toFixed(2)} €</tr>`
-}
-
-function clearShoppingCart(key)
-{
-    localStorage.removeItem(key)
-    refreshCart()
-}
-
-function deleteProductFromCart(id)
-{
-    const shoppingCart = getLocalStorage("panier")
-
-    const newShoppingCart = shoppingCart.filter();
-
-    setLocalStorage("panier", newShoppingCart);
-
-    refreshCart();
+  return element.parentNode.parentNode
 }
